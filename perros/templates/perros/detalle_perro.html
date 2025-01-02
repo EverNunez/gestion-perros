@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle del Perro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #4CAF50;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath d='M30 50C30 43 35 38 42 38C49 38 54 43 54 50C54 57 49 62 42 62C35 62 30 57 30 50ZM50 70C50 63 55 58 62 58C69 58 74 63 74 70C74 77 69 82 62 82C55 82 50 77 50 70ZM70 50C70 43 75 38 82 38C89 38 94 43 94 50C94 57 89 62 82 62C75 62 70 57 70 50ZM50 30C50 23 55 18 62 18C69 18 74 23 74 30C74 37 69 42 62 42C55 42 50 37 50 30Z' fill='white' fill-opacity='0.4'/%3E%3C/svg%3E");
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 800px;
+            width: 100%;
+        }
+        h1, h2 {
+            color: #2E7D32;
+            margin-bottom: 1.5rem;
+        }
+        p {
+            font-size: 1rem;
+            margin: 0.5rem 0;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+        }
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #2E7D32;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+        a {
+            background-color: #2E7D32;
+            color: white;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            margin: 0.25rem;
+        }
+        a:hover {
+            background-color: #1B5E20;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Detalles de {{ perro.nombre }}</h1>
+        <p><strong>Raza:</strong> {{ perro.raza }}</p>
+        <p><strong>Madre:</strong> {{ perro.madre }}</p>
+        <p><strong>Padre:</strong> {{ perro.padre }}</p>
+        <a href="{% url 'agregar_cruce' perro.id %}">Agregar Cruce</a>
+
+        <h2>Cruces:</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha de Cruce</th>
+                    <th>Días Transcurridos</th>
+                    <th>Fecha Estimada de Parto</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cruce in cruces %}
+                <tr>
+                    <td>{{ cruce.fecha_insem }}</td>
+                    <td>
+                        {% if cruce.dias_transcurridos is not None %}
+                            {{ cruce.dias_transcurridos }}
+                        {% else %}
+                            No disponible
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if cruce.fecha_parto_estimada %}
+                            {{ cruce.fecha_parto_estimada }}
+                        {% else %}
+                            No disponible
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'editar_cruce' cruce.id %}">Editar</a>
+                        <a href="{% url 'eliminar_cruce' cruce.id %}">Eliminar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{% url 'lista_perros' %}" class="back-link">Volver a la Lista de Perros</a>
+    </div>
+</body>
+</html>
